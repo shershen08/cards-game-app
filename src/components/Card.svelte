@@ -1,7 +1,9 @@
 <div class="scene scene--card">
   <div class="card" on:click={wrapCard} class:flipped="{front}">
-    <div class="card__face card__face--front"><img src={symbol} alt='card'></div>
-    <div class="card__face card__face--back">back</div>
+    <div class="card__face card__face--front"><img src={symbol} alt={symbol}></div>
+    <div class="card__face card__face--back"title={symbol}>
+        <img src="/bg.jpg" alt="bg">
+    </div>
   </div>
 </div>
 
@@ -12,21 +14,39 @@
 
     export let symbol;
 
-    let front = true;
-    function wrapCard(){
+    boardState.subscribe(state => {
+
         if($boardState.guessedItems.indexOf(symbol) > -1 ) return;
 
-        dispatch('turn', symbol)
+        if($boardState.toRemove === symbol && !front && $boardState.guessedItems.indexOf(symbol) == -1) {
+            front = !front;
+              boardState.update(state => {
+                const newState = {
+                  ...state
+                }
+                newState.toRemove = null;
+                newState.guessedItems = state.guessedItems
+                return newState
+            });
+        }
+    });
+
+    let front = true;
+    function wrapCard(){
         
+        if($boardState.guessedItems.indexOf(symbol) > -1 ) return;
+
+        dispatch('turn', {
+            name: symbol
+            })
+
         boardState.update(state => {
             state.openedItems.push(symbol)
-            return state
+            return {
+              ...state
+            }
         });
         front = !front;
-        
-       // setTimeout(() => {
-            
-        //}, 300)
         
     }
 </script>
@@ -36,7 +56,7 @@
 .scene {
   width: 100px;
   height: 90px;
-  margin: 10px;
+  margin: 5px;
   perspective: 500px;
   display: inline-block;
 }
@@ -48,6 +68,7 @@
   transform-style: preserve-3d;
   cursor: pointer;
   position: relative;
+  border: 1px solid #ddd;
 }
 
 .card.flipped {
@@ -68,8 +89,16 @@
   background: #fff;
 }
 
+.card__face--front img {}
+
 .card__face--back {
-  background: #999;
+  background: #5e5e5e;
   transform: rotateY(180deg);
+}
+.card__face--back img {
+       width: 79px;
+    height: 70px;
+    opacity: .3;
+    margin-top: 12px;
 }
 </style>

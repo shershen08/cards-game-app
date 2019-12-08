@@ -1,6 +1,28 @@
-import { writable } from 'svelte/store';
+import { writable, readable, derived } from 'svelte/store';
 
-export const boardState = writable({
+export const defaultState = {
     openedItems: [],
-    guessedItems: []
-});
+    guessedItems: [],
+	toRemove: null,
+	gameStart: new Date()
+};
+
+export const boardState = writable(defaultState);
+
+function createCount() {
+	const { subscribe, set, update } = writable(new Date());
+
+	const interval = setInterval(() => {
+		set(new Date());
+	}, 1000);
+
+	return {
+		subscribe,
+		reset: () => {
+			clearInterval(interval);
+			return set(new Date())
+		}
+	};
+}
+
+export const count = createCount();
