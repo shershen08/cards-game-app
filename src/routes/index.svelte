@@ -1,46 +1,57 @@
-<style>
-	h1, figure, p {
-		text-align: center;
-		margin: 0 auto;
+
+
+<script>
+	import Card from '../components/Card.svelte';
+	import cardsNames from './cards.js';
+	import { onMount, createEventDispatcher } from 'svelte';
+	import { boardState } from '../store.js';
+
+	const dispatch = createEventDispatcher();
+	
+	function getRandomInt(max) {
+		return Math.floor(Math.random() * Math.floor(max));
 	}
 
-	h1 {
-		font-size: 2.8em;
-		text-transform: uppercase;
-		font-weight: 700;
-		margin: 0 0 0.5em 0;
-	}
+	let cards;
 
-	figure {
-		margin: 0 0 1em 0;
-	}
+	onMount(async () => {
+		let start = getRandomInt(cardsNames.length)
+		const cardsGroup = cardsNames.splice(start, 8) 
+		cards = [...cardsGroup, ...cardsGroup]
+	});
+	function checkAmount() {
+		if($boardState.openedItems > 2) {
+			console.log($boardState.openedItems)
+			boardState.update(state => {
+				state.openedItems.splice(1,3)
+				return state
+			})
+		}
 
-	img {
-		width: 100%;
-		max-width: 400px;
-		margin: 0 0 1em 0;
-	}
-
-	p {
-		margin: 1em auto;
-	}
-
-	@media (min-width: 480px) {
-		h1 {
-			font-size: 4em;
+		if($boardState.openedItems[0] === $boardState.openedItems[1]){
+			boardState.update(state => {
+				state.guessedItems.push($boardState.openedItems[1])
+				state.openedItems = []
+				return state
+			})
 		}
 	}
-</style>
 
+</script>
 <svelte:head>
-	<title>Sapper project template</title>
+	<title>Card game with </title>
 </svelte:head>
+{JSON.stringify($boardState)}
+<section class="game-board">
+	{#if cards} 
+		{#each cards as card}
+			<Card symbol={`/logos/${card}.gif`} on:turn={checkAmount}/>
+		{/each}
+	{/if}
+</section>
 
-<h1>Great success!</h1>
-
-<figure>
-	<img alt='Borat' src='great-success.png'>
-	<figcaption>HIGH FIVE!</figcaption>
-</figure>
-
-<p><strong>Try editing this file (src/routes/index.svelte) to test live reloading.</strong></p>
+<style>
+.game-board {
+	width: 550px;
+}
+</style>
