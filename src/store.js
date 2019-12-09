@@ -18,6 +18,9 @@ function createCount() {
 
 	return {
 		subscribe,
+		stop: () => {
+			clearInterval(interval);
+		},
 		reset: () => {
 			clearInterval(interval);
 			return set(new Date())

@@ -89,16 +89,19 @@
   background: #fff;
 }
 
-.card__face--front img {}
+.card__face--front img {
+  user-select: none;
+}
 
 .card__face--back {
   background: #5e5e5e;
   transform: rotateY(180deg);
 }
 .card__face--back img {
-       width: 79px;
+    width: 79px;
     height: 70px;
     opacity: .3;
     margin-top: 12px;
+    user-select: none;
 }
 </style>
