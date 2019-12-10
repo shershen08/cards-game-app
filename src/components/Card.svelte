@@ -74,6 +74,9 @@
 .card.flipped {
   transform: rotateY(180deg);
 }
+/* .card:hover {
+  transform: scale(1.1);
+} */
 
 .card__face {
   position: absolute;

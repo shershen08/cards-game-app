@@ -2,6 +2,7 @@
 	<title>About</title>
 </svelte:head>
 
-<h1>About this site</h1>
+<h1>Cards game</h1>
 
-<p>This is the 'about' page. There's not much here.</p>
+<p>Sample ap built with Sapper + Svelte</p>
+<p><a href="http://mic-ro.com/metro/metrologos.html?size=lg&sort=city">metro logos</a> from mic-ro.com</p>

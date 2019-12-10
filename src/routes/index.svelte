@@ -2,6 +2,7 @@
 
 <script>
 	import Card from '../components/Card.svelte';
+	import Pannel from '../components/Pannel.svelte';
 	import cardsNames from './cards.js';
 	import { onMount, createEventDispatcher } from 'svelte';
 	import { boardState, defaultState, count } from '../store.js';
@@ -12,15 +13,22 @@
 		return Math.floor(Math.random() * Math.floor(max));
 	}
 	
-	const fieldSizes = [16, 36]
+	const fieldSizes = [16, 36, 100]
 	let selectedFieldSize = fieldSizes[0];
 	let isBigSize = false;
-	//let TOTAL_CARDS = !isBigSize ? fieldSizes[0] : fieldSizes[1];
 	let cards;
 
 	onMount(async () => {
 		restart()
 	});
+
+	function startNewGame(event){
+		selectedFieldSize = event.detail.size;
+		cards = []
+		setTimeout(() => {
+			restart()
+		})
+	}
 
 	function restart(){
 		isBigSize = selectedFieldSize > 20;
@@ -40,14 +48,7 @@
 		cards = [...cardsGroup, ...cardsGroup].sort(() => Math.random() - 0.5);
 	}
 
-	$: elapsedTime = parseInt(($count.getTime() - $boardState.gameStart.getTime())/1000)
 
-	boardState.subscribe(state => {
-		if($boardState.guessedItems.length >= selectedFieldSize/2 -1 ){
-			console.log('Game over', elapsedTime)
-			count.stop();
-		}
-	})
 
 	function checkAmount() {
 
@@ -84,22 +85,7 @@
 	<title>Card game with </title>
 </svelte:head>
 
-<button on:click={restart}>new game</button>
-
-<select bind:value={selectedFieldSize}>
-		{#each fieldSizes as size}
-			<option value={size}>
-				{size}
-			</option>
-		{/each}
-	</select>
-
-<strong>{elapsedTime}</strong>
-
-<div>
-	{$boardState.guessedItems.length} of {selectedFieldSize/2}
-</div>
-<hr>
+<Pannel fieldSizes={fieldSizes} on:new={startNewGame}/>
 
 <!-- {JSON.stringify($boardState)} -->
 <section class="game-board" class:sizeBig="{isBigSize}">
