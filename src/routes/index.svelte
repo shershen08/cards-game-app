@@ -14,6 +14,23 @@
 	}
 	
 	const fieldSizes = [16, 36, 100]
+
+	//todo
+	const setups = [{
+		title: 'small',
+		size: 16,
+		fieldWidth: 440
+	},
+	{
+		title: 'big',
+		size: 36,
+		fieldWidth: 640
+	},
+	{
+		title: 'huge',
+		size: 100,
+		fieldWidth: 800
+	}]
 	let selectedFieldSize = fieldSizes[0];
 	let isBigSize = false;
 	let cards;
@@ -81,9 +98,6 @@
 	}
 
 </script>
-<svelte:head>
-	<title>Card game with </title>
-</svelte:head>
 
 <Pannel fieldSizes={fieldSizes} on:new={startNewGame}/>
 
@@ -91,7 +105,7 @@
 <section class="game-board" class:sizeBig="{isBigSize}">
 	{#if cards} 
 		{#each cards as card}
-			<Card symbol={`/logos/${card}.gif`} on:turn={checkAmount}/>
+			<Card symbol={`assets/logos/${card}.gif`} on:turn={checkAmount}/>
 		{/each}
 	{/if}
 </section>
