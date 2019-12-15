@@ -1,71 +1,66 @@
 
 
 <script>
-	import Card from '../components/Card.svelte';
-	import Pannel from '../components/Pannel.svelte';
-	import cardsNames from './cards.js';
-	import { onMount, createEventDispatcher } from 'svelte';
-	import { boardState, defaultState, count } from '../store.js';
+  import Dialog, {Title, Content, Actions} from '@smui/dialog';
+  import Button, {Label} from '@smui/button';
 
-	const dispatch = createEventDispatcher();
-	
-	function getRandomInt(max) {
-		return Math.floor(Math.random() * Math.floor(max));
-	}
-	
-	const fieldSizes = [16, 36, 100]
+  import Card from '../components/Card.svelte';
+  import Pannel from '../components/Pannel.svelte';
+  import { onMount, createEventDispatcher, tick } from 'svelte';
 
-	//todo
-	const setups = [{
-		title: 'small',
-		size: 16,
-		fieldWidth: 440
-	},
-	{
-		title: 'big',
-		size: 36,
-		fieldWidth: 640
-	},
-	{
-		title: 'huge',
-		size: 100,
-		fieldWidth: 800
-	}]
-	let selectedFieldSize = fieldSizes[0];
-	let isBigSize = false;
+  import { boardState, count } from '../store/index.js';
+  import {defaultState} from '../store/default';
+  import {prepareCards} from '../utils';
+
+const dispatch = createEventDispatcher();
+
+  let dialog;
+	let size;
+	let boardWidthSetting;
 	let cards;
+	let fieldWidth;
+	let totalTmeToWin;
+
+	$: cssWidth = `width: ${fieldWidth}px`
+
+  function closeHandler(){
+
+  }
+
+  function onGameOver(event){
+	dialog.open();
+	totalTmeToWin = event.detail.time;
+  }
+
+  function shareProgress(){
+	  //TODO
+  }
 
 	onMount(async () => {
 		restart()
 	});
 
-	function startNewGame(event){
-		selectedFieldSize = event.detail.size;
+	async function startNewGameWithSameParams(){
 		cards = []
-		setTimeout(() => {
-			restart()
-		})
+		totalTmeToWin = 0;
+		await tick();
+		restart()
+	}
+
+	async function startNewGame(event){
+		fieldWidth = event.detail.settings.fieldWidth
+		size = event.detail.settings.size
+		startNewGameWithSameParams();
 	}
 
 	function restart(){
-		isBigSize = selectedFieldSize > 20;
 		boardState.update(_ => ({
 			...defaultState,
 			guessedItems: [],
 			gameStart: new Date()
 		}))
-
-		//prepare cards
-		let start = getRandomInt(cardsNames.length)
-		let cardsGroup = cardsNames.slice(start, start + selectedFieldSize/2) 
-		if(cardsNames.length - start < selectedFieldSize/2) {
-			const leftFromFront = selectedFieldSize/2 - cardsNames.length + start
-			cardsGroup = cardsGroup.concat(cardsNames.slice(0, leftFromFront))
-		}
-		cards = [...cardsGroup, ...cardsGroup].sort(() => Math.random() - 0.5);
+		cards = prepareCards(size)
 	}
-
-
 
 	function checkAmount() {
 
@@ -73,10 +68,9 @@
 			
 			boardState.update(state => {
 				 const newState = {
+					 ...defaultState,
 					guessedItems:$boardState.guessedItems.length ? [...$boardState.guessedItems, $boardState.openedItems[1]] : [$boardState.openedItems[1]],
-					toRemove: null,
 					openedItems: [],
-					gameStart: state.gameStart
 				}
 				return newState;
 			})
@@ -86,10 +80,11 @@
 				
 				boardState.update(state => {
 					const newState = {
+						...defaultState,
 						toRemove: $boardState.openedItems[0],
 						openedItems: $boardState.openedItems.splice(1, 3),
 						guessedItems: $boardState.guessedItems,
-						gameStart: $boardState.gameStart
+						gameStart: $boardState.gameStart,
 					}
 					return newState;
 				})
@@ -99,10 +94,30 @@
 
 </script>
 
-<Pannel fieldSizes={fieldSizes} on:new={startNewGame}/>
+<Pannel on:new={startNewGame} on:gameover={onGameOver}/>
 
-<!-- {JSON.stringify($boardState)} -->
-<section class="game-board" class:sizeBig="{isBigSize}">
+<Dialog
+  bind:this={dialog}
+  aria-labelledby="dialog-title"
+  aria-describedby="dialog-content"
+  on:MDCDialog:closed={closeHandler}
+>
+  <Title id="dialog-title">Game over</Title>
+  <Content id="dialog-content">
+    Congratultations, you are all done with this set of cards!<br>
+	If only took you {totalTmeToWin} seconds.
+  </Content>
+  <Actions>
+    <Button>
+      <Label on:click={shareProgress}>Share</Label>
+    </Button>
+    <Button on:click={startNewGameWithSameParams}>
+      <Label>New game</Label>
+    </Button>
+  </Actions>
+</Dialog>
+
+<section style="{cssWidth}">
 	{#if cards} 
 		{#each cards as card}
 			<Card symbol={`assets/logos/${card}.gif`} on:turn={checkAmount}/>
@@ -110,11 +125,3 @@
 	{/if}
 </section>
 
-<style>
-.game-board {
-	width: 460px;
-}
-.game-board.sizeBig {
-	width: 660px;
-}
-</style>
