@@ -2,7 +2,7 @@
   <div class="card" on:click={wrapCard} class:flipped="{front}">
     <div class="card__face card__face--front"><img src={symbol} alt={symbol}></div>
     <div class="card__face card__face--back"title={symbol}>
-        <img src="assets/bg.jpg" alt="bg">
+        <img src="assets/bg.png" alt="bg">
     </div>
   </div>
 </div>

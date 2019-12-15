@@ -5,10 +5,19 @@ export const boardState = writable(defaultState);
 
 function createCount() {
 	const { subscribe, set, update } = writable(new Date());
+	
+	let tick = true;
+	let interval;
 
-	const interval = setInterval(() => {
-		set(new Date());
-	}, 1000);
+	function init(){
+		return setInterval(() => {
+			if(tick) {
+				set(new Date());
+			}
+		}, 1000);
+	}
+
+	interval = init()
 
 	return {
 		subscribe,
@@ -16,10 +25,12 @@ function createCount() {
 			clearInterval(interval);
 		},
 		pause: () => {
-			// todo
+			tick = !tick
 		},
 		reset: () => {
 			clearInterval(interval);
+			tick = true;
+			interval = init()
 			return set(new Date())
 		}
 	};

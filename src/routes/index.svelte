@@ -10,7 +10,7 @@
 
   import { boardState, count } from '../store/index.js';
   import {defaultState} from '../store/default';
-  import {prepareCards} from '../utils';
+  import {prepareCards, formatTime} from '../utils';
 
 const dispatch = createEventDispatcher();
 
@@ -21,7 +21,7 @@ const dispatch = createEventDispatcher();
 	let fieldWidth;
 	let totalTmeToWin;
 
-	$: cssWidth = `width: ${fieldWidth}px`
+	$: cssWidth = `width: ${fieldWidth}px;padding-top: 50px;`
 
   function closeHandler(){
 
@@ -60,6 +60,7 @@ const dispatch = createEventDispatcher();
 			gameStart: new Date()
 		}))
 		cards = prepareCards(size)
+		count.reset()
 	}
 
 	function checkAmount() {
@@ -105,12 +106,13 @@ const dispatch = createEventDispatcher();
   <Title id="dialog-title">Game over</Title>
   <Content id="dialog-content">
     Congratultations, you are all done with this set of cards!<br>
-	If only took you {totalTmeToWin} seconds.
+	It only took you {formatTime(totalTmeToWin)}.
   </Content>
   <Actions>
-    <Button>
+      <a href="https://twitter.com/share?" class="twitter-share-button"  data-text="Card memory game with #svelte" data-show-count="true">Tweet</a>
+    <!-- <Button>
       <Label on:click={shareProgress}>Share</Label>
-    </Button>
+    </Button> -->
     <Button on:click={startNewGameWithSameParams}>
       <Label>New game</Label>
     </Button>

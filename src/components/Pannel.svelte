@@ -3,7 +3,7 @@
     import Select, {Option} from '@smui/select';
     import Card from '@smui/card';
 
-    import { createEventDispatcher, afterUpdate } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     import { boardState, count } from '../store/index.js';
     
     import { formatTime } from '../utils';
@@ -27,7 +27,7 @@
     })
 
     function togglePause(){
-        //TODO
+        count.pause()
     }
 
     function passStartNewGame(){
@@ -35,10 +35,13 @@
             settings: fieldSettings
         })
     }
+
+    onMount(() => {
+        passStartNewGame();
+    })
 </script>
 
-<Card padded>
-
+<Card>
     <div class="mdc-layout-grid">
     <div class="mdc-layout-grid__inner">
         <div class="mdc-layout-grid__cell">
@@ -56,7 +59,7 @@
             <Button on:click={togglePause}><Label>pause</Label></Button>
             <strong>{formatTime(elapsedTime)}</strong>
             <div>
-                {$boardState.guessedItems.length} of 
+                Opened {$boardState.guessedItems.length} of 
                 {fieldSettings.size/2}
             </div>
         </section>

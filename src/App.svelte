@@ -23,7 +23,6 @@
 <TopAppBar {dense} {prominent} {variant}>
   <Row>
     <Section on:click={() => navigate("/")}>
-      <!-- <IconButton class="material-icons">menu</IconButton> -->
       <Title>{title}</Title>
     </Section>
     <Section align="end" toolbar>
@@ -31,7 +30,7 @@
     </Section>
   </Row>
 </TopAppBar>
-  <div style="padding-top:80px;">
+  <div style="padding-top:70px;">
     <Route path="about" component="{About}" />
     <Route path="/"><Main /></Route>
   </div>
