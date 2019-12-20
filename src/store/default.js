@@ -3,7 +3,7 @@ export const defaultState = {
     openedItems: [],
     guessedItems: [],
 	toRemove: null,
-	gameStart: new Date(),
+	gameStart: new Date().getTime(),
 	setups: [{
 		title: 'small',
 		size: 16,

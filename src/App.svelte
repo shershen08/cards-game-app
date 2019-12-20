@@ -9,7 +9,6 @@
 
   export let url = "";
 
-
   let dense = false;
   let prominent = false;
   let variant = 'standard';
@@ -26,11 +25,12 @@
       <Title>{title}</Title>
     </Section>
     <Section align="end" toolbar>
+            <a href="https://twitter.com/share?" class="twitter-share-button"  data-text="Card memory game with #svelte" data-show-count="true">Tweet</a>
         <Link to="about"><IconButton class="material-icons" aria-label="Bookmark this page">info</IconButton></Link>
     </Section>
   </Row>
 </TopAppBar>
-  <div style="padding-top:70px;">
+  <div style="padding:70px 0 0 0;">
     <Route path="about" component="{About}" />
     <Route path="/"><Main /></Route>
   </div>

@@ -1,12 +1,8 @@
 {
   "version": 3,
   "file": "bundle.css",
-  "sources": [
-    "../src/routes/index.svelte"
-  ],
-  "sourcesContent": [
-    "\n\n<script>\n\timport Card from '../components/Card.svelte';\n\timport Pannel from '../components/Pannel.svelte';\n\timport cardsNames from './cards.js';\n\timport { onMount, createEventDispatcher, tick } from 'svelte';\n\timport { boardState, count } from '../store/index.js';\n\timport {defaultState} from '../store/default';\n\n\tconst dispatch = createEventDispatcher();\n\t\n\tfunction getRandomInt(max) {\n\t\treturn Math.floor(Math.random() * Math.floor(max));\n\t}\n\t\n\tlet size;\n\tlet boardWidthSetting;\n\tlet cards;\n\tlet fieldWidth;\n\n\t$: cssWidth = `width: ${fieldWidth}px`\n\n\tonMount(async () => {\n\t\trestart()\n\t});\n\n\tasync function startNewGame(event){\n\t\tfieldWidth = event.detail.settings.fieldWidth\n\t\tsize = event.detail.settings.size\n\n\t\tcards = []\n\n\t\tawait tick();\n\t\trestart()\n\t}\n\n\tfunction restart(){\n\t\t\n\t\tboardState.update(_ => ({\n\t\t\t...defaultState,\n\t\t\tguessedItems: [],\n\t\t\tgameStart: new Date()\n\t\t}))\n\n\t\t//prepare cards\n\t\tlet start = getRandomInt(cardsNames.length)\n\t\tlet cardsGroup = cardsNames.slice(start, start + size/2) \n\t\tif(cardsNames.length - start < size/2) {\n\t\t\tconst leftFromFront = size/2 - cardsNames.length + start\n\t\t\tcardsGroup = cardsGroup.concat(cardsNames.slice(0, leftFromFront))\n\t\t}\n\t\tcards = [...cardsGroup, ...cardsGroup].sort(() => Math.random() - 0.5);\n\t}\n\n\n\n\tfunction checkAmount() {\n\n\t\tif($boardState.openedItems.length > 1 && $boardState.openedItems[0] === $boardState.openedItems[1]){\n\t\t\t\n\t\t\tboardState.update(state => {\n\t\t\t\t const newState = {\n\t\t\t\t\tguessedItems:$boardState.guessedItems.length ? [...$boardState.guessedItems, $boardState.openedItems[1]] : [$boardState.openedItems[1]],\n\t\t\t\t\ttoRemove: null,\n\t\t\t\t\topenedItems: [],\n\t\t\t\t\tgameStart: state.gameStart,\n\t\t\t\t\tsetups: state.setups\n\t\t\t\t}\n\t\t\t\treturn newState;\n\t\t\t})\n\n\t\t} else {\n\t\t\tif($boardState.openedItems.length > 1) {\n\t\t\t\t\n\t\t\t\tboardState.update(state => {\n\t\t\t\t\tconst newState = {\n\t\t\t\t\t\ttoRemove: $boardState.openedItems[0],\n\t\t\t\t\t\topenedItems: $boardState.openedItems.splice(1, 3),\n\t\t\t\t\t\tguessedItems: $boardState.guessedItems,\n\t\t\t\t\t\tgameStart: $boardState.gameStart,\n\t\t\t\t\t\tsetups: state.setups\n\t\t\t\t\t}\n\t\t\t\t\treturn newState;\n\t\t\t\t})\n\t\t\t}\n\t\t}\n\t}\n\n</script>\n\n<Pannel on:new={startNewGame}/>\n\n<section class=\"game-board\" style=\"{cssWidth}\">\n\t{#if cards} \n\t\t{#each cards as card}\n\t\t\t<Card symbol={`assets/logos/${card}.gif`} on:turn={checkAmount}/>\n\t\t{/each}\n\t{/if}\n</section>\n\n<style>\n.game-board {\n\twidth: 460px;\n}\n.game-board.sizeBig {\n\twidth: 660px;\n}\n</style>"
-  ],
+  "sources": [],
+  "sourcesContent": [],
   "names": [],
-  "mappings": "AAsGA,WAAW,eAAC,CAAC,AACZ,KAAK,CAAE,KAAK,AACb,CAAC"
+  "mappings": ""
 }

@@ -4,15 +4,16 @@ import {defaultState} from './default';
 export const boardState = writable(defaultState);
 
 function createCount() {
-	const { subscribe, set, update } = writable(new Date());
+	const { subscribe, set, update } = writable(new Date().getTime());
 	
 	let tick = true;
 	let interval;
+	let pauseTime;
 
 	function init(){
 		return setInterval(() => {
 			if(tick) {
-				set(new Date());
+				set(new Date().getTime());
 			}
 		}, 1000);
 	}
@@ -28,12 +29,15 @@ function createCount() {
 			tick = !tick
 		},
 		reset: () => {
-			clearInterval(interval);
 			tick = true;
 			interval = init()
-			return set(new Date())
 		}
 	};
 }
 
 export const count = createCount();
+
+export const dialogs = writable({
+	records: false,
+	endofgame: false
+});

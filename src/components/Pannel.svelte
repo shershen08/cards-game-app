@@ -4,9 +4,10 @@
     import Card from '@smui/card';
 
     import { createEventDispatcher, onMount } from 'svelte';
-    import { boardState, count } from '../store/index.js';
+    import { boardState, count, dialogs } from '../store/index.js';
     
     import { formatTime } from '../utils';
+    import { saveRecord } from '../record';
 
     const dispatch = createEventDispatcher();
 
@@ -15,11 +16,12 @@
     let fieldSettings = $boardState.setups[fieldSettingsIndex];
 
     $: fieldSettings = $boardState.setups[fieldSettingsIndex];
-    $: elapsedTime = parseInt(($count.getTime() - $boardState.gameStart.getTime())/1000)
+    $: elapsedTime = parseInt(($count - $boardState.gameStart)/1000)
 
     boardState.subscribe(state => {
         if(state.guessedItems.length >= fieldSettings.size/2 -1 ){
             count.stop();
+            saveRecord(fieldSettings.size, elapsedTime)
             dispatch('gameover', {
                 time: elapsedTime
             })
@@ -35,6 +37,14 @@
             settings: fieldSettings
         })
     }
+    function showRecords(){
+        dialogs.update(old => {
+          return {
+            ...old,
+            records: true
+          }
+        })
+    }
 
     onMount(() => {
         passStartNewGame();
@@ -46,6 +56,7 @@
     <div class="mdc-layout-grid__inner">
         <div class="mdc-layout-grid__cell">
             <Button on:click={passStartNewGame} variant="raised"><Label>new game</Label></Button>
+            <Button on:click={showRecords}><Label>records</Label></Button>
         </div>
         <div class="mdc-layout-grid__cell">
             <Select bind:value={fieldSettingsIndex} label="Size">
