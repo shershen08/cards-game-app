@@ -1,7 +1,7 @@
 <div class="scene scene--card">
-  <div class="card" on:click={wrapCard} class:flipped="{front}">
-    <div class="card__face card__face--front"><img src={symbol} alt={symbol}></div>
-    <div class="card__face card__face--back"title={symbol}>
+  <div data-testid="card-wrapper" class="card" on:click={wrapCard} class:flipped="{front}">
+    <div data-testid="face-side" class="card__face card__face--front"><img src={symbol} alt={symbol}></div>
+    <div data-testid="bg-side" class="card__face card__face--back"title={symbol}>
         <img src="assets/bg.png" alt="bg">
     </div>
   </div>
