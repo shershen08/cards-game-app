@@ -6,9 +6,9 @@
     "build": "rollup -c",
     "autobuild": "rollup -c -w",
     "dev": "run-p start:dev autobuild",
-    "start": "sirv public --single",
-    "start:dev": "sirv public --single --dev",
-    "serve": "node server.js"
+    "serve:local": "sirv public --single",
+    "serve:local-dev": "sirv public --single --dev",
+    "start": "node server.js"
   },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^1.3.0",
