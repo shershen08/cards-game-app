@@ -4,6 +4,8 @@ import commonjs from 'rollup-plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import postcss from 'rollup-plugin-postcss';
+import alias from '@rollup/plugin-alias';
+
 //import { sass } from 'svelte-preprocess-sass';
 const production = !process.env.ROLLUP_WATCH;
 
@@ -16,6 +18,11 @@ export default {
 		file: 'public/bundle.js'
 	},
 	plugins: [
+		alias({
+			entries: [
+				{ find: '@', replacement: './src' }
+			  ]
+		}),
 		svelte({
 			// enable run-time checks when not in production
 			dev: !production,

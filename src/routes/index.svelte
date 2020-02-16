@@ -5,14 +5,14 @@
 
   import Button, {Label} from '@smui/button';
 
-  import Card from '../components/Card.svelte';
-  import DialogScores from '../components/DialogScores.svelte';
-  import DialogEndGame from '../components/DialogEndGame.svelte';
-  import Pannel from '../components/Pannel.svelte';
+  import Card from '@/components/Card.svelte';
+  import DialogScores from '@/components/DialogScores.svelte';
+  import DialogEndGame from '@/components/DialogEndGame.svelte';
+  import Pannel from '@/components/Pannel.svelte';
   
-  import { boardState, count, dialogs } from '../store/index.js';
-  import {defaultState} from '../store/default';
-  import {prepareCards, formatTime} from '../utils';
+  import { boardState, count, dialogs } from '@/store/index.js';
+  import {defaultState} from '@/store/default.js';
+  import {prepareCards, formatTime} from '@/utils.js';
 
 	let size;
 	let cards;

@@ -8,7 +8,7 @@
 </div>
 
 <script>
-    import { boardState } from '../store/index.js';
+    import { boardState } from '@/store/index.js';
     import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 

@@ -3,8 +3,8 @@
     import Dialog, {Title, Content, Actions} from '@smui/dialog';
     import Button, {Label} from '@smui/button';
 
-    import {formatTime} from '../utils';
-    import { dialogs } from '../store/index.js';
+    import {formatTime} from '@/utils.js';
+    import { dialogs } from '@/store/index.js';
 
     let openRecordsDialog;
     const recordsValues = 42;
