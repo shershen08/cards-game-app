@@ -19,7 +19,7 @@
     "@rollup/plugin-alias": "^3.0.1",
     "compression": "^1.7.1",
     "express": "^4.17.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "polka": "next",
     "rollup-plugin-livereload": "^1.0.4",
     "rollup-plugin-postcss": "^2.0.3",
